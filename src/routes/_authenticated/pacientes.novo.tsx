@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TituloPagina } from "@/components/app-shell";
-import { criarPaciente } from "@/server/pacientes.functions";
+import { criarPaciente } from "@/lib/pacientes.functions";
 
 export const Route = createFileRoute("/_authenticated/pacientes/novo")({
   head: () => ({

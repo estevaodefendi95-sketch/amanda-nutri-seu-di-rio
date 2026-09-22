@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { rotaInicial } from "@/lib/auth";
-import { reivindicarNutricionista } from "@/server/pacientes.functions";
+import { reivindicarNutricionista } from "@/lib/pacientes.functions";
 
 export const Route = createFileRoute("/")({
   ssr: false,
