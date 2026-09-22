@@ -92,7 +92,7 @@ function formatarData(valor?: string | null) {
   return `${dia}/${mes}/${ano}`;
 }
 
-function Dado({ rotulo, valor }: { rotulo: string; valor?: string | null }) {
+function Dado({ rotulo, valor }: { rotulo: string; valor: string | null | undefined }) {
   return (
     <div className="min-w-0">
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{rotulo}</p>
