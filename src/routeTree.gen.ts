@@ -13,9 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
+import { Route as AuthenticatedAgendaRouteImport } from './routes/_authenticated/agenda'
 import { Route as AuthenticatedAlimentosRouteImport } from './routes/_authenticated/alimentos'
 import { Route as AuthenticatedDiarioRouteImport } from './routes/_authenticated/diario'
+import { Route as AuthenticatedFinanceiroRouteImport } from './routes/_authenticated/financeiro'
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
+import { Route as AuthenticatedMensagensRouteImport } from './routes/_authenticated/mensagens'
 import { Route as AuthenticatedMinhaDietaRouteImport } from './routes/_authenticated/minha-dieta'
 import { Route as AuthenticatedMinhaEvolucaoRouteImport } from './routes/_authenticated/minha-evolucao'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
@@ -43,6 +46,11 @@ const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
   path: '/redefinir-senha',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAgendaRoute = AuthenticatedAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAlimentosRoute = AuthenticatedAlimentosRouteImport.update({
   id: '/alimentos',
   path: '/alimentos',
@@ -53,9 +61,19 @@ const AuthenticatedDiarioRoute = AuthenticatedDiarioRouteImport.update({
   path: '/diario',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFinanceiroRoute = AuthenticatedFinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedInicioRoute = AuthenticatedInicioRouteImport.update({
   id: '/inicio',
   path: '/inicio',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMensagensRoute = AuthenticatedMensagensRouteImport.update({
+  id: '/mensagens',
+  path: '/mensagens',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMinhaDietaRoute = AuthenticatedMinhaDietaRouteImport.update({
@@ -103,9 +121,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/agenda': typeof AuthenticatedAgendaRoute
   '/alimentos': typeof AuthenticatedAlimentosRoute
   '/diario': typeof AuthenticatedDiarioRoute
+  '/financeiro': typeof AuthenticatedFinanceiroRoute
   '/inicio': typeof AuthenticatedInicioRoute
+  '/mensagens': typeof AuthenticatedMensagensRoute
   '/minha-dieta': typeof AuthenticatedMinhaDietaRoute
   '/minha-evolucao': typeof AuthenticatedMinhaEvolucaoRoute
   '/painel': typeof AuthenticatedPainelRoute
@@ -118,9 +139,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/agenda': typeof AuthenticatedAgendaRoute
   '/alimentos': typeof AuthenticatedAlimentosRoute
   '/diario': typeof AuthenticatedDiarioRoute
+  '/financeiro': typeof AuthenticatedFinanceiroRoute
   '/inicio': typeof AuthenticatedInicioRoute
+  '/mensagens': typeof AuthenticatedMensagensRoute
   '/minha-dieta': typeof AuthenticatedMinhaDietaRoute
   '/minha-evolucao': typeof AuthenticatedMinhaEvolucaoRoute
   '/painel': typeof AuthenticatedPainelRoute
@@ -135,9 +159,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/_authenticated/agenda': typeof AuthenticatedAgendaRoute
   '/_authenticated/alimentos': typeof AuthenticatedAlimentosRoute
   '/_authenticated/diario': typeof AuthenticatedDiarioRoute
+  '/_authenticated/financeiro': typeof AuthenticatedFinanceiroRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
+  '/_authenticated/mensagens': typeof AuthenticatedMensagensRoute
   '/_authenticated/minha-dieta': typeof AuthenticatedMinhaDietaRoute
   '/_authenticated/minha-evolucao': typeof AuthenticatedMinhaEvolucaoRoute
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
@@ -152,9 +179,12 @@ export interface FileRouteTypes {
     | '/'
     | '/recuperar-senha'
     | '/redefinir-senha'
+    | '/agenda'
     | '/alimentos'
     | '/diario'
+    | '/financeiro'
     | '/inicio'
+    | '/mensagens'
     | '/minha-dieta'
     | '/minha-evolucao'
     | '/painel'
@@ -167,9 +197,12 @@ export interface FileRouteTypes {
     | '/'
     | '/recuperar-senha'
     | '/redefinir-senha'
+    | '/agenda'
     | '/alimentos'
     | '/diario'
+    | '/financeiro'
     | '/inicio'
+    | '/mensagens'
     | '/minha-dieta'
     | '/minha-evolucao'
     | '/painel'
@@ -183,9 +216,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/recuperar-senha'
     | '/redefinir-senha'
+    | '/_authenticated/agenda'
     | '/_authenticated/alimentos'
     | '/_authenticated/diario'
+    | '/_authenticated/financeiro'
     | '/_authenticated/inicio'
+    | '/_authenticated/mensagens'
     | '/_authenticated/minha-dieta'
     | '/_authenticated/minha-evolucao'
     | '/_authenticated/painel'
@@ -232,6 +268,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RedefinirSenhaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/agenda': {
+      id: '/_authenticated/agenda'
+      path: '/agenda'
+      fullPath: '/agenda'
+      preLoaderRoute: typeof AuthenticatedAgendaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/alimentos': {
       id: '/_authenticated/alimentos'
       path: '/alimentos'
@@ -246,11 +289,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDiarioRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/financeiro': {
+      id: '/_authenticated/financeiro'
+      path: '/financeiro'
+      fullPath: '/financeiro'
+      preLoaderRoute: typeof AuthenticatedFinanceiroRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/inicio': {
       id: '/_authenticated/inicio'
       path: '/inicio'
       fullPath: '/inicio'
       preLoaderRoute: typeof AuthenticatedInicioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mensagens': {
+      id: '/_authenticated/mensagens'
+      path: '/mensagens'
+      fullPath: '/mensagens'
+      preLoaderRoute: typeof AuthenticatedMensagensRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/minha-dieta': {
@@ -306,9 +363,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAgendaRoute: typeof AuthenticatedAgendaRoute
   AuthenticatedAlimentosRoute: typeof AuthenticatedAlimentosRoute
   AuthenticatedDiarioRoute: typeof AuthenticatedDiarioRoute
+  AuthenticatedFinanceiroRoute: typeof AuthenticatedFinanceiroRoute
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
+  AuthenticatedMensagensRoute: typeof AuthenticatedMensagensRoute
   AuthenticatedMinhaDietaRoute: typeof AuthenticatedMinhaDietaRoute
   AuthenticatedMinhaEvolucaoRoute: typeof AuthenticatedMinhaEvolucaoRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
@@ -319,9 +379,12 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAgendaRoute: AuthenticatedAgendaRoute,
   AuthenticatedAlimentosRoute: AuthenticatedAlimentosRoute,
   AuthenticatedDiarioRoute: AuthenticatedDiarioRoute,
+  AuthenticatedFinanceiroRoute: AuthenticatedFinanceiroRoute,
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
+  AuthenticatedMensagensRoute: AuthenticatedMensagensRoute,
   AuthenticatedMinhaDietaRoute: AuthenticatedMinhaDietaRoute,
   AuthenticatedMinhaEvolucaoRoute: AuthenticatedMinhaEvolucaoRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,

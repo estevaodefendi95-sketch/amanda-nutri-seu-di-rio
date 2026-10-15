@@ -74,6 +74,180 @@ export type Database = {
         }
         Relationships: []
       }
+      consultas: {
+        Row: {
+          anotacoes: string | null
+          created_at: string
+          fim: string | null
+          google_event_id: string | null
+          id: string
+          inicio: string
+          link_online: string | null
+          paciente_id: string
+          status: string
+          tipo: string
+        }
+        Insert: {
+          anotacoes?: string | null
+          created_at?: string
+          fim?: string | null
+          google_event_id?: string | null
+          id?: string
+          inicio: string
+          link_online?: string | null
+          paciente_id: string
+          status?: string
+          tipo?: string
+        }
+        Update: {
+          anotacoes?: string | null
+          created_at?: string
+          fim?: string | null
+          google_event_id?: string | null
+          id?: string
+          inicio?: string
+          link_online?: string | null
+          paciente_id?: string
+          status?: string
+          tipo?: string
+        }
+        Relationships: []
+      }
+      lancamentos: {
+        Row: {
+          consulta_id: string | null
+          created_at: string
+          descricao: string
+          forma: string | null
+          id: string
+          pago_em: string | null
+          paciente_id: string | null
+          valor: number
+          vencimento: string
+        }
+        Insert: {
+          consulta_id?: string | null
+          created_at?: string
+          descricao: string
+          forma?: string | null
+          id?: string
+          pago_em?: string | null
+          paciente_id?: string | null
+          valor: number
+          vencimento?: string
+        }
+        Update: {
+          consulta_id?: string | null
+          created_at?: string
+          descricao?: string
+          forma?: string | null
+          id?: string
+          pago_em?: string | null
+          paciente_id?: string | null
+          valor?: number
+          vencimento?: string
+        }
+        Relationships: []
+      }
+      metas: {
+        Row: {
+          created_at: string
+          descricao: string
+          id: string
+          paciente_id: string
+          prazo: string | null
+          status: string
+          unidade: string | null
+          valor_alvo: number | null
+        }
+        Insert: {
+          created_at?: string
+          descricao: string
+          id?: string
+          paciente_id: string
+          prazo?: string | null
+          status?: string
+          unidade?: string | null
+          valor_alvo?: number | null
+        }
+        Update: {
+          created_at?: string
+          descricao?: string
+          id?: string
+          paciente_id?: string
+          prazo?: string | null
+          status?: string
+          unidade?: string | null
+          valor_alvo?: number | null
+        }
+        Relationships: []
+      }
+      exames: {
+        Row: {
+          arquivo_path: string | null
+          created_at: string
+          data: string
+          id: string
+          liberado: boolean
+          nome: string
+          observacoes: string | null
+          paciente_id: string
+          unidade: string | null
+          valor: string | null
+        }
+        Insert: {
+          arquivo_path?: string | null
+          created_at?: string
+          data?: string
+          id?: string
+          liberado?: boolean
+          nome: string
+          observacoes?: string | null
+          paciente_id: string
+          unidade?: string | null
+          valor?: string | null
+        }
+        Update: {
+          arquivo_path?: string | null
+          created_at?: string
+          data?: string
+          id?: string
+          liberado?: boolean
+          nome?: string
+          observacoes?: string | null
+          paciente_id?: string
+          unidade?: string | null
+          valor?: string | null
+        }
+        Relationships: []
+      }
+      mensagens: {
+        Row: {
+          autor_id: string
+          created_at: string
+          id: string
+          lida_em: string | null
+          paciente_id: string
+          texto: string
+        }
+        Insert: {
+          autor_id: string
+          created_at?: string
+          id?: string
+          lida_em?: string | null
+          paciente_id: string
+          texto: string
+        }
+        Update: {
+          autor_id?: string
+          created_at?: string
+          id?: string
+          lida_em?: string | null
+          paciente_id?: string
+          texto?: string
+        }
+        Relationships: []
+      }
       consentimentos: {
         Row: {
           aceito_em: string

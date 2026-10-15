@@ -2,13 +2,16 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   BookOpen,
   Apple,
+  CalendarDays,
   Home,
   LayoutDashboard,
   LineChart,
   Leaf,
   LogOut,
+  MessageCircle,
   Salad,
   Users,
+  Wallet,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -21,14 +24,18 @@ type ItemMenu = { titulo: string; url: string; icone: typeof Home };
 const MENU: Record<Papel, ItemMenu[]> = {
   nutricionista: [
     { titulo: "Painel", url: "/painel", icone: LayoutDashboard },
+    { titulo: "Agenda", url: "/agenda", icone: CalendarDays },
     { titulo: "Pacientes", url: "/pacientes", icone: Users },
     { titulo: "Alimentos", url: "/alimentos", icone: Apple },
+    { titulo: "Mensagens", url: "/mensagens", icone: MessageCircle },
+    { titulo: "Financeiro", url: "/financeiro", icone: Wallet },
   ],
   paciente: [
     { titulo: "Início", url: "/inicio", icone: Home },
     { titulo: "Minha Dieta", url: "/minha-dieta", icone: Salad },
     { titulo: "Diário", url: "/diario", icone: BookOpen },
     { titulo: "Evolução", url: "/minha-evolucao", icone: LineChart },
+    { titulo: "Mensagens", url: "/mensagens", icone: MessageCircle },
   ],
 };
 

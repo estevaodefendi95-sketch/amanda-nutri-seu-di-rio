@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, BookOpen, LineChart, Salad } from "lucide-react";
+import { ArrowRight, BookOpen, LineChart, Salad, Target } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -59,6 +59,20 @@ function Inicio() {
         .eq("dieta_id", dieta!.id)
         .order("ordem")
         .limit(4);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const { data: metas } = useQuery({
+    queryKey: ["minhas-metas"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("metas")
+        .select("id, descricao, valor_alvo, unidade, prazo")
+        .eq("status", "em_andamento")
+        .order("created_at", { ascending: false })
+        .limit(6);
       if (error) throw error;
       return data ?? [];
     },
@@ -137,6 +151,36 @@ function Inicio() {
           )}
         </CardContent>
       </Card>
+
+      {(metas ?? []).length > 0 ? (
+        <Card className="mb-6">
+          <CardHeader className="flex flex-row items-center gap-3">
+            <span className="grid size-10 place-items-center rounded-xl bg-primary-soft text-primary-soft-foreground">
+              <Target className="size-5" />
+            </span>
+            <CardTitle>Minhas metas</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {(metas ?? []).map((m) => (
+                <li key={m.id} className="rounded-xl bg-secondary px-4 py-3 text-sm">
+                  <p className="font-semibold text-secondary-foreground">{m.descricao}</p>
+                  <p className="text-muted-foreground">
+                    {[
+                      m.valor_alvo != null
+                        ? `${m.valor_alvo} ${m.unidade ?? ""}`.trim()
+                        : m.unidade,
+                      m.prazo ? `até ${m.prazo.slice(8, 10)}/${m.prazo.slice(5, 7)}` : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Atalho

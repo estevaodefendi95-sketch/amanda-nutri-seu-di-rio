@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar } from "@/components/app-shell";
+import { AbaExames } from "@/components/ficha/aba-exames";
+import { AbaMetas } from "@/components/ficha/aba-metas";
 import { AbaAnamnese } from "@/components/ficha/aba-anamnese";
 import { AbaAvaliacoes } from "@/components/ficha/aba-avaliacoes";
 import { AbaDiario } from "@/components/ficha/aba-diario";
@@ -102,6 +104,8 @@ function FichaPaciente() {
             <TabsTrigger value="plano">Plano alimentar</TabsTrigger>
             <TabsTrigger value="avaliacoes">Avaliações</TabsTrigger>
             <TabsTrigger value="diario">Diário</TabsTrigger>
+            <TabsTrigger value="metas">Metas</TabsTrigger>
+            <TabsTrigger value="exames">Exames</TabsTrigger>
             <TabsTrigger value="anamnese">Anamnese</TabsTrigger>
             <TabsTrigger value="config">Configurações</TabsTrigger>
           </TabsList>
@@ -117,6 +121,12 @@ function FichaPaciente() {
           </TabsContent>
           <TabsContent value="diario" className="mt-5">
             <AbaDiario pacienteId={id} />
+          </TabsContent>
+          <TabsContent value="metas" className="mt-5">
+            <AbaMetas pacienteId={id} />
+          </TabsContent>
+          <TabsContent value="exames" className="mt-5">
+            <AbaExames pacienteId={id} />
           </TabsContent>
           <TabsContent value="anamnese" className="mt-5">
             <AbaAnamnese pacienteId={id} />
