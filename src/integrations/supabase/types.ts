@@ -14,8 +14,141 @@ export type Database = {
   }
   public: {
     Tables: {
+      alimentos: {
+        Row: {
+          carbo: number
+          created_at: string
+          fibra: number
+          fonte: string
+          gordura: number
+          id: string
+          kcal: number
+          nome: string
+          proteina: number
+        }
+        Insert: {
+          carbo?: number
+          created_at?: string
+          fibra?: number
+          fonte?: string
+          gordura?: number
+          id?: string
+          kcal?: number
+          nome: string
+          proteina?: number
+        }
+        Update: {
+          carbo?: number
+          created_at?: string
+          fibra?: number
+          fonte?: string
+          gordura?: number
+          id?: string
+          kcal?: number
+          nome?: string
+          proteina?: number
+        }
+        Relationships: []
+      }
+      anamneses: {
+        Row: {
+          atualizada_em: string
+          created_at: string
+          id: string
+          paciente_id: string
+          respostas: Json
+        }
+        Insert: {
+          atualizada_em?: string
+          created_at?: string
+          id?: string
+          paciente_id: string
+          respostas?: Json
+        }
+        Update: {
+          atualizada_em?: string
+          created_at?: string
+          id?: string
+          paciente_id?: string
+          respostas?: Json
+        }
+        Relationships: []
+      }
+      consentimentos: {
+        Row: {
+          aceito_em: string
+          id: string
+          user_id: string
+          versao: string
+        }
+        Insert: {
+          aceito_em?: string
+          id?: string
+          user_id: string
+          versao: string
+        }
+        Update: {
+          aceito_em?: string
+          id?: string
+          user_id?: string
+          versao?: string
+        }
+        Relationships: []
+      }
+      itens_refeicao: {
+        Row: {
+          alimento_id: string | null
+          created_at: string
+          descricao: string | null
+          id: string
+          medida_caseira: string | null
+          ordem: number
+          quantidade_g: number | null
+          refeicao_id: string
+          substituicoes: string | null
+        }
+        Insert: {
+          alimento_id?: string | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          medida_caseira?: string | null
+          ordem?: number
+          quantidade_g?: number | null
+          refeicao_id: string
+          substituicoes?: string | null
+        }
+        Update: {
+          alimento_id?: string | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          medida_caseira?: string | null
+          ordem?: number
+          quantidade_g?: number | null
+          refeicao_id?: string
+          substituicoes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itens_refeicao_alimento_id_fkey"
+            columns: ["alimento_id"]
+            isOneToOne: false
+            referencedRelation: "alimentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itens_refeicao_refeicao_id_fkey"
+            columns: ["refeicao_id"]
+            isOneToOne: false
+            referencedRelation: "refeicoes_dieta"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       avaliacoes: {
         Row: {
+          dobras: Json
           altura: number | null
           circunferencias: Json
           created_at: string
@@ -28,6 +161,7 @@ export type Database = {
           peso: number | null
         }
         Insert: {
+          dobras?: Json
           altura?: number | null
           circunferencias?: Json
           created_at?: string
@@ -40,6 +174,7 @@ export type Database = {
           peso?: number | null
         }
         Update: {
+          dobras?: Json
           altura?: number | null
           circunferencias?: Json
           created_at?: string
@@ -55,6 +190,7 @@ export type Database = {
       }
       diario_alimentar: {
         Row: {
+          revisado_em: string | null
           comentario_nutricionista: string | null
           created_at: string
           data: string
@@ -65,6 +201,7 @@ export type Database = {
           refeicao: string
         }
         Insert: {
+          revisado_em?: string | null
           comentario_nutricionista?: string | null
           created_at?: string
           data?: string
@@ -75,6 +212,7 @@ export type Database = {
           refeicao: string
         }
         Update: {
+          revisado_em?: string | null
           comentario_nutricionista?: string | null
           created_at?: string
           data?: string
@@ -88,6 +226,12 @@ export type Database = {
       }
       dietas: {
         Row: {
+          meta_carbo_g: number | null
+          meta_gordura_g: number | null
+          meta_kcal: number | null
+          meta_proteina_g: number | null
+          publicada_em: string | null
+          status: string
           ativa: boolean
           created_at: string
           data_fim: string | null
@@ -98,6 +242,12 @@ export type Database = {
           titulo: string
         }
         Insert: {
+          meta_carbo_g?: number | null
+          meta_gordura_g?: number | null
+          meta_kcal?: number | null
+          meta_proteina_g?: number | null
+          publicada_em?: string | null
+          status?: string
           ativa?: boolean
           created_at?: string
           data_fim?: string | null
@@ -108,6 +258,12 @@ export type Database = {
           titulo: string
         }
         Update: {
+          meta_carbo_g?: number | null
+          meta_gordura_g?: number | null
+          meta_kcal?: number | null
+          meta_proteina_g?: number | null
+          publicada_em?: string | null
+          status?: string
           ativa?: boolean
           created_at?: string
           data_fim?: string | null
@@ -156,6 +312,10 @@ export type Database = {
       }
       profiles: {
         Row: {
+          altura_cm: number | null
+          nivel_atividade: string | null
+          paciente_ve_calorias: boolean
+          status: string
           created_at: string
           data_nascimento: string | null
           id: string
@@ -166,6 +326,10 @@ export type Database = {
           telefone: string | null
         }
         Insert: {
+          altura_cm?: number | null
+          nivel_atividade?: string | null
+          paciente_ve_calorias?: boolean
+          status?: string
           created_at?: string
           data_nascimento?: string | null
           id: string
@@ -176,6 +340,10 @@ export type Database = {
           telefone?: string | null
         }
         Update: {
+          altura_cm?: number | null
+          nivel_atividade?: string | null
+          paciente_ve_calorias?: boolean
+          status?: string
           created_at?: string
           data_nascimento?: string | null
           id?: string

@@ -1,9 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, MessageCircleHeart } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { usePerfilAtual } from "@/lib/auth";
+import { hojeISO } from "@/lib/nutricao";
 import { Carregando, EstadoVazio, TituloPagina } from "@/components/app-shell";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -23,6 +31,35 @@ export const Route = createFileRoute("/_authenticated/diario")({
 });
 
 function Diario() {
+  const queryClient = useQueryClient();
+  const { data: perfil } = usePerfilAtual();
+  const [salvando, setSalvando] = useState(false);
+
+  async function registrar(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const dados = new FormData(form);
+    const refeicao = String(dados.get("refeicao") ?? "").trim();
+    const descricao = String(dados.get("descricao") ?? "").trim();
+    const userId = perfil?.user.id;
+    if (!refeicao || !descricao || !userId) return;
+    setSalvando(true);
+    const { error } = await supabase.from("diario_alimentar").insert({
+      paciente_id: userId,
+      data: hojeISO(),
+      refeicao,
+      descricao,
+    });
+    setSalvando(false);
+    if (error) {
+      toast.error("Não foi possível registrar. Tente novamente.");
+      return;
+    }
+    form.reset();
+    toast.success("Refeição registrada.");
+    await queryClient.invalidateQueries({ queryKey: ["diario"] });
+  }
+
   const { data, isLoading } = useQuery({
     queryKey: ["diario"],
     queryFn: async () => {
@@ -44,13 +81,40 @@ function Diario() {
         descricao="Aqui ficam suas refeições registradas e os retornos da Amanda."
       />
 
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Registrar refeição</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={registrar} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="di-refeicao">Refeição</Label>
+              <Input id="di-refeicao" name="refeicao" required placeholder="Ex.: Almoço" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="di-desc">O que você comeu?</Label>
+              <Textarea
+                id="di-desc"
+                name="descricao"
+                required
+                rows={3}
+                placeholder="Alimentos, quantidades e como se sentiu"
+              />
+            </div>
+            <Button type="submit" disabled={salvando}>
+              Registrar
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
       {isLoading ? (
         <Carregando />
       ) : (data ?? []).length === 0 ? (
         <EstadoVazio
           icone={BookOpen}
           titulo="Seu diário está vazio"
-          texto="Em breve você poderá enviar fotos e descrições das suas refeições por aqui."
+          texto="Registre sua primeira refeição acima e a Amanda comenta por aqui."
         />
       ) : (
         <div className="space-y-3">

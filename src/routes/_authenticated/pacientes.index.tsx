@@ -43,6 +43,7 @@ function Pacientes() {
         .from("profiles")
         .select("id, nome, telefone, objetivo")
         .in("id", ids)
+        .neq("status", "arquivado")
         .order("nome");
       if (error) throw error;
       return perfis ?? [];

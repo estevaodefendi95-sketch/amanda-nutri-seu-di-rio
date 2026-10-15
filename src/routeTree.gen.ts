@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
+import { Route as AuthenticatedAlimentosRouteImport } from './routes/_authenticated/alimentos'
 import { Route as AuthenticatedDiarioRouteImport } from './routes/_authenticated/diario'
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
 import { Route as AuthenticatedMinhaDietaRouteImport } from './routes/_authenticated/minha-dieta'
@@ -21,6 +22,7 @@ import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedPacientesIndexRouteImport } from './routes/_authenticated/pacientes.index'
 import { Route as AuthenticatedPacientesIdRouteImport } from './routes/_authenticated/pacientes.$id'
 import { Route as AuthenticatedPacientesNovoRouteImport } from './routes/_authenticated/pacientes.novo'
+import { Route as AuthenticatedPacientesIdPlanoDietaIdRouteImport } from './routes/_authenticated/pacientes.$id_.plano.$dietaId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +42,11 @@ const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
   id: '/redefinir-senha',
   path: '/redefinir-senha',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAlimentosRoute = AuthenticatedAlimentosRouteImport.update({
+  id: '/alimentos',
+  path: '/alimentos',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDiarioRoute = AuthenticatedDiarioRouteImport.update({
   id: '/diario',
@@ -85,11 +92,18 @@ const AuthenticatedPacientesNovoRoute =
     path: '/pacientes/novo',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPacientesIdPlanoDietaIdRoute =
+  AuthenticatedPacientesIdPlanoDietaIdRouteImport.update({
+    id: '/pacientes/$id_/plano/$dietaId',
+    path: '/pacientes/$id/plano/$dietaId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/alimentos': typeof AuthenticatedAlimentosRoute
   '/diario': typeof AuthenticatedDiarioRoute
   '/inicio': typeof AuthenticatedInicioRoute
   '/minha-dieta': typeof AuthenticatedMinhaDietaRoute
@@ -98,11 +112,13 @@ export interface FileRoutesByFullPath {
   '/pacientes/$id': typeof AuthenticatedPacientesIdRoute
   '/pacientes/novo': typeof AuthenticatedPacientesNovoRoute
   '/pacientes/': typeof AuthenticatedPacientesIndexRoute
+  '/pacientes/$id/plano/$dietaId': typeof AuthenticatedPacientesIdPlanoDietaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/alimentos': typeof AuthenticatedAlimentosRoute
   '/diario': typeof AuthenticatedDiarioRoute
   '/inicio': typeof AuthenticatedInicioRoute
   '/minha-dieta': typeof AuthenticatedMinhaDietaRoute
@@ -111,6 +127,7 @@ export interface FileRoutesByTo {
   '/pacientes/$id': typeof AuthenticatedPacientesIdRoute
   '/pacientes/novo': typeof AuthenticatedPacientesNovoRoute
   '/pacientes': typeof AuthenticatedPacientesIndexRoute
+  '/pacientes/$id/plano/$dietaId': typeof AuthenticatedPacientesIdPlanoDietaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -118,6 +135,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/_authenticated/alimentos': typeof AuthenticatedAlimentosRoute
   '/_authenticated/diario': typeof AuthenticatedDiarioRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
   '/_authenticated/minha-dieta': typeof AuthenticatedMinhaDietaRoute
@@ -126,6 +144,7 @@ export interface FileRoutesById {
   '/_authenticated/pacientes/$id': typeof AuthenticatedPacientesIdRoute
   '/_authenticated/pacientes/novo': typeof AuthenticatedPacientesNovoRoute
   '/_authenticated/pacientes/': typeof AuthenticatedPacientesIndexRoute
+  '/_authenticated/pacientes/$id_/plano/$dietaId': typeof AuthenticatedPacientesIdPlanoDietaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -133,6 +152,7 @@ export interface FileRouteTypes {
     | '/'
     | '/recuperar-senha'
     | '/redefinir-senha'
+    | '/alimentos'
     | '/diario'
     | '/inicio'
     | '/minha-dieta'
@@ -141,11 +161,13 @@ export interface FileRouteTypes {
     | '/pacientes/$id'
     | '/pacientes/novo'
     | '/pacientes/'
+    | '/pacientes/$id/plano/$dietaId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/recuperar-senha'
     | '/redefinir-senha'
+    | '/alimentos'
     | '/diario'
     | '/inicio'
     | '/minha-dieta'
@@ -154,12 +176,14 @@ export interface FileRouteTypes {
     | '/pacientes/$id'
     | '/pacientes/novo'
     | '/pacientes'
+    | '/pacientes/$id/plano/$dietaId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/recuperar-senha'
     | '/redefinir-senha'
+    | '/_authenticated/alimentos'
     | '/_authenticated/diario'
     | '/_authenticated/inicio'
     | '/_authenticated/minha-dieta'
@@ -168,6 +192,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pacientes/$id'
     | '/_authenticated/pacientes/novo'
     | '/_authenticated/pacientes/'
+    | '/_authenticated/pacientes/$id_/plano/$dietaId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -206,6 +231,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/redefinir-senha'
       preLoaderRoute: typeof RedefinirSenhaRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/alimentos': {
+      id: '/_authenticated/alimentos'
+      path: '/alimentos'
+      fullPath: '/alimentos'
+      preLoaderRoute: typeof AuthenticatedAlimentosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/diario': {
       id: '/_authenticated/diario'
@@ -263,10 +295,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPacientesNovoRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pacientes/$id_/plano/$dietaId': {
+      id: '/_authenticated/pacientes/$id_/plano/$dietaId'
+      path: '/pacientes/$id/plano/$dietaId'
+      fullPath: '/pacientes/$id/plano/$dietaId'
+      preLoaderRoute: typeof AuthenticatedPacientesIdPlanoDietaIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAlimentosRoute: typeof AuthenticatedAlimentosRoute
   AuthenticatedDiarioRoute: typeof AuthenticatedDiarioRoute
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
   AuthenticatedMinhaDietaRoute: typeof AuthenticatedMinhaDietaRoute
@@ -275,9 +315,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPacientesIdRoute: typeof AuthenticatedPacientesIdRoute
   AuthenticatedPacientesNovoRoute: typeof AuthenticatedPacientesNovoRoute
   AuthenticatedPacientesIndexRoute: typeof AuthenticatedPacientesIndexRoute
+  AuthenticatedPacientesIdPlanoDietaIdRoute: typeof AuthenticatedPacientesIdPlanoDietaIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAlimentosRoute: AuthenticatedAlimentosRoute,
   AuthenticatedDiarioRoute: AuthenticatedDiarioRoute,
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
   AuthenticatedMinhaDietaRoute: AuthenticatedMinhaDietaRoute,
@@ -286,6 +328,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPacientesIdRoute: AuthenticatedPacientesIdRoute,
   AuthenticatedPacientesNovoRoute: AuthenticatedPacientesNovoRoute,
   AuthenticatedPacientesIndexRoute: AuthenticatedPacientesIndexRoute,
+  AuthenticatedPacientesIdPlanoDietaIdRoute:
+    AuthenticatedPacientesIdPlanoDietaIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

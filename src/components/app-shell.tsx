@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   BookOpen,
+  Apple,
   Home,
   LayoutDashboard,
   LineChart,
@@ -21,6 +22,7 @@ const MENU: Record<Papel, ItemMenu[]> = {
   nutricionista: [
     { titulo: "Painel", url: "/painel", icone: LayoutDashboard },
     { titulo: "Pacientes", url: "/pacientes", icone: Users },
+    { titulo: "Alimentos", url: "/alimentos", icone: Apple },
   ],
   paciente: [
     { titulo: "Início", url: "/inicio", icone: Home },

@@ -40,7 +40,7 @@ function Inicio() {
       const { data, error } = await supabase
         .from("dietas")
         .select("id, titulo, descricao, data_inicio, data_fim")
-        .eq("ativa", true)
+        .eq("status", "publicada")
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();

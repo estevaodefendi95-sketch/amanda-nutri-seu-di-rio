@@ -40,7 +40,7 @@ function Painel() {
   const { data, isLoading } = useQuery({
     queryKey: ["painel-resumo"],
     queryFn: async () => {
-      const [pacientes, diarios, recentes] = await Promise.all([
+      const [pacientes, diarios, recentes, pendentes] = await Promise.all([
         supabase
           .from("user_roles")
           .select("id", { count: "exact", head: true })
@@ -52,13 +52,19 @@ function Painel() {
         supabase
           .from("profiles")
           .select("id, nome, objetivo, created_at")
+          .neq("status", "arquivado")
           .order("created_at", { ascending: false })
           .limit(5),
+        supabase
+          .from("diario_alimentar")
+          .select("id", { count: "exact", head: true })
+          .is("revisado_em", null),
       ]);
       return {
         totalPacientes: pacientes.count ?? 0,
         diariosHoje: diarios.count ?? 0,
         recentes: recentes.data ?? [],
+        diariosPendentes: pendentes.count ?? 0,
       };
     },
   });
@@ -84,7 +90,7 @@ function Painel() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         <CartaoNumero
           titulo="Pacientes ativos"
           valor={isLoading ? "—" : data?.totalPacientes}
@@ -96,6 +102,12 @@ function Painel() {
           valor={isLoading ? "—" : data?.diariosHoje}
           icone={BookOpen}
           detalhe="Refeições registradas hoje"
+        />
+        <CartaoNumero
+          titulo="Diários para comentar"
+          valor={isLoading ? "—" : data?.diariosPendentes}
+          icone={BookOpen}
+          detalhe="Ainda sem revisão"
         />
       </div>
 
@@ -153,7 +165,7 @@ function Painel() {
             <ol className="space-y-4 text-sm">
               {[
                 "Cadastre seus pacientes e envie o convite de acesso por e-mail.",
-                "Monte o plano alimentar com refeições e horários.",
+                "Monte o plano alimentar com refeições, alimentos e metas.",
                 "Acompanhe fotos do diário, medidas e gráficos de evolução.",
               ].map((passo, i) => (
                 <li key={passo} className="flex items-start gap-3">
