@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Apple, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
+import { AuthLayout } from "@/components/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -80,65 +81,51 @@ function Entrar() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-secondary px-4 py-10">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <span className="mx-auto grid size-14 place-items-center rounded-3xl bg-primary text-primary-foreground">
-            <Apple className="size-7" />
-          </span>
-          <h1 className="mt-4 font-display text-3xl text-foreground">Amanda Nutri</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Área do Paciente — seu acompanhamento nutricional em um só lugar.
-          </p>
+    <AuthLayout
+      titulo="Bem-vinda(o) de volta"
+      descricao="Entre para ver seu plano, registrar suas refeições e acompanhar sua evolução."
+      rodape="O acesso é criado pela nutricionista. Se ainda não recebeu seu convite por e-mail, fale com a Amanda."
+    >
+      <form onSubmit={entrar} className="space-y-5">
+        <div className="space-y-2">
+          <Label htmlFor="email">E-mail</Label>
+          <Input
+            id="email"
+            type="email"
+            required
+            autoComplete="email"
+            placeholder="voce@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
 
-        <form
-          onSubmit={entrar}
-          className="space-y-4 rounded-3xl border border-border bg-card p-6 shadow-sm"
-        >
-          <div className="space-y-2">
-            <Label htmlFor="email">E-mail</Label>
-            <Input
-              id="email"
-              type="email"
-              required
-              autoComplete="email"
-              placeholder="voce@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="space-y-2">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
             <Label htmlFor="senha">Senha</Label>
-            <Input
-              id="senha"
-              type="password"
-              required
-              autoComplete="current-password"
-              placeholder="••••••••"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
-          </div>
-
-          <Button type="submit" className="w-full" disabled={carregando}>
-            {carregando ? <Loader2 className="size-4 animate-spin" /> : null}
-            Entrar
-          </Button>
-
-          <div className="text-center">
-            <Link to="/recuperar-senha" className="text-sm text-primary underline-offset-4 hover:underline">
+            <Link
+              to="/recuperar-senha"
+              className="text-xs font-semibold text-primary underline-offset-4 hover:underline"
+            >
               Esqueci minha senha
             </Link>
           </div>
-        </form>
+          <Input
+            id="senha"
+            type="password"
+            required
+            autoComplete="current-password"
+            placeholder="••••••••"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+        </div>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          O acesso é criado pela nutricionista. Se ainda não recebeu seu convite por e-mail, fale com
-          a Amanda.
-        </p>
-      </div>
-    </div>
+        <Button type="submit" size="lg" className="w-full" disabled={carregando}>
+          {carregando ? <Loader2 className="size-4 animate-spin" /> : null}
+          Entrar
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }

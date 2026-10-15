@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BookOpen, LineChart, Salad } from "lucide-react";
+import { ArrowRight, BookOpen, LineChart, Salad } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EstadoVazio, TituloPagina } from "@/components/app-shell";
+import { EstadoVazio } from "@/components/app-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { usePerfilAtual } from "@/lib/auth";
 
@@ -22,6 +22,13 @@ export const Route = createFileRoute("/_authenticated/inicio")({
   }),
   component: Inicio,
 });
+
+function saudacao() {
+  const h = new Date().getHours();
+  if (h < 12) return "Bom dia";
+  if (h < 18) return "Boa tarde";
+  return "Boa noite";
+}
 
 function Inicio() {
   const { data: perfil } = usePerfilAtual();
@@ -42,31 +49,88 @@ function Inicio() {
     },
   });
 
+  const { data: refeicoes } = useQuery({
+    queryKey: ["dieta-ativa-refeicoes", dieta?.id],
+    enabled: Boolean(dieta?.id),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("refeicoes_dieta")
+        .select("id, nome, horario")
+        .eq("dieta_id", dieta!.id)
+        .order("ordem")
+        .limit(4);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   return (
     <>
-      <TituloPagina
-        titulo={primeiroNome ? `Olá, ${primeiroNome}!` : "Olá!"}
-        descricao="Que bom ter você por aqui. Vamos cuidar de você com carinho."
-      />
+      <section className="mb-8 overflow-hidden rounded-3xl bg-brand p-6 text-primary-foreground shadow-lift sm:p-8">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/70">{saudacao()}</p>
+        <h1 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">
+          {primeiroNome ? `Olá, ${primeiroNome}!` : "Olá!"}
+        </h1>
+        <p className="mt-2 max-w-md text-sm text-white/80 sm:text-base">
+          Que bom ter você por aqui. Vamos cuidar de você com carinho.
+        </p>
+        <Button
+          asChild
+          variant="secondary"
+          className="mt-5 bg-white text-primary hover:bg-white/90"
+        >
+          <Link to="/diario">
+            <BookOpen className="size-4" /> Registrar refeição
+          </Link>
+        </Button>
+      </section>
 
       <Card className="mb-6">
-        <CardHeader className="flex flex-row items-center gap-2 pb-2">
-          <Salad className="size-5 shrink-0 text-primary" />
-          <CardTitle className="font-display text-lg">Minha dieta ativa</CardTitle>
+        <CardHeader className="flex flex-row items-center gap-3">
+          <span className="grid size-10 place-items-center rounded-xl bg-primary-soft text-primary-soft-foreground">
+            <Salad className="size-5" />
+          </span>
+          <CardTitle>Minha dieta ativa</CardTitle>
         </CardHeader>
         <CardContent>
           {dieta ? (
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground">{dieta.titulo}</p>
-              {dieta.descricao ? (
-                <p className="text-sm text-muted-foreground">{dieta.descricao}</p>
+            <div className="space-y-4">
+              <div>
+                <p className="font-semibold text-foreground">{dieta.titulo}</p>
+                {dieta.descricao ? (
+                  <p className="mt-1 text-sm text-muted-foreground">{dieta.descricao}</p>
+                ) : null}
+              </div>
+
+              {(refeicoes ?? []).length > 0 ? (
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {(refeicoes ?? []).map((r) => (
+                    <li
+                      key={r.id}
+                      className="flex items-center justify-between gap-3 rounded-xl bg-secondary px-4 py-3 text-sm"
+                    >
+                      <span className="truncate font-semibold text-secondary-foreground">
+                        {r.nome}
+                      </span>
+                      {r.horario ? (
+                        <span className="shrink-0 text-muted-foreground">
+                          {String(r.horario).slice(0, 5)}
+                        </span>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
               ) : null}
+
               <Button asChild variant="secondary" size="sm">
-                <Link to="/minha-dieta">Ver plano completo</Link>
+                <Link to="/minha-dieta">
+                  Ver plano completo <ArrowRight className="size-4" />
+                </Link>
               </Button>
             </div>
           ) : (
             <EstadoVazio
+              icone={Salad}
               titulo="Sua dieta está sendo preparada"
               texto="Assim que a Amanda publicar seu plano alimentar, ele aparecerá aqui."
             />
@@ -77,7 +141,7 @@ function Inicio() {
       <div className="grid gap-4 sm:grid-cols-2">
         <Atalho
           para="/diario"
-          titulo="Registrar refeição"
+          titulo="Diário alimentar"
           texto="Envie uma foto e conte o que você comeu."
           icone={BookOpen}
         />
@@ -106,13 +170,16 @@ function Atalho({
   return (
     <Link
       to={para}
-      className="flex items-start gap-3 rounded-2xl border border-border bg-card p-5 transition-colors hover:bg-secondary"
+      className="group flex items-start gap-4 rounded-2xl border border-border/70 bg-card p-5 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
     >
-      <Icone className="mt-0.5 size-5 shrink-0 text-primary" />
-      <span className="min-w-0">
+      <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary-soft-foreground">
+        <Icone className="size-5" />
+      </span>
+      <span className="min-w-0 flex-1">
         <span className="block font-semibold text-foreground">{titulo}</span>
         <span className="block text-sm text-muted-foreground">{texto}</span>
       </span>
+      <ArrowRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
     </Link>
   );
 }

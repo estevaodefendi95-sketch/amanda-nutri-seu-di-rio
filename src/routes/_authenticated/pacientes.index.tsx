@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ChevronRight, Search, UserPlus } from "lucide-react";
+import { ChevronRight, Search, UserPlus, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { EstadoVazio, TituloPagina } from "@/components/app-shell";
+import { Avatar, Carregando, EstadoVazio, TituloPagina } from "@/components/app-shell";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/pacientes/")({
@@ -14,7 +14,8 @@ export const Route = createFileRoute("/_authenticated/pacientes/")({
       { title: "Pacientes | Amanda Nutri" },
       {
         name: "description",
-        content: "Lista de pacientes em acompanhamento, com busca por nome e acesso à ficha completa.",
+        content:
+          "Lista de pacientes em acompanhamento, com busca por nome e acesso à ficha completa.",
       },
       { property: "og:title", content: "Pacientes | Amanda Nutri" },
       { property: "og:description", content: "Lista de pacientes em acompanhamento." },
@@ -55,10 +56,13 @@ function Pacientes() {
   return (
     <>
       <TituloPagina
+        sobretitulo={
+          data ? `${data.length} ${data.length === 1 ? "paciente" : "pacientes"}` : undefined
+        }
         titulo="Pacientes"
         descricao="Acompanhe quem está com você e abra a ficha de cada pessoa."
         acao={
-          <Button asChild>
+          <Button asChild size="lg">
             <Link to="/pacientes/novo">
               <UserPlus className="size-4" /> Novo paciente
             </Link>
@@ -66,35 +70,39 @@ function Pacientes() {
         }
       />
 
-      <div className="relative mb-4">
-        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      <div className="relative mb-5">
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           placeholder="Buscar por nome"
-          className="pl-9"
+          aria-label="Buscar paciente por nome"
+          className="pl-10"
         />
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Carregando...</p>
+        <Carregando />
       ) : filtrados.length === 0 ? (
         <EstadoVazio
-          titulo="Nenhum paciente por aqui"
-          texto="Cadastre o primeiro paciente para começar o acompanhamento."
+          titulo={busca ? "Ninguém encontrado" : "Nenhum paciente por aqui"}
+          texto={
+            busca
+              ? "Confira a grafia do nome ou limpe a busca."
+              : "Cadastre o primeiro paciente para começar o acompanhamento."
+          }
+          icone={Users}
         />
       ) : (
-        <ul className="space-y-2">
+        <ul className="grid gap-3 md:grid-cols-2">
           {filtrados.map((paciente) => (
             <li key={paciente.id}>
               <Link
                 to="/pacientes/$id"
                 params={{ id: paciente.id }}
-                className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-colors hover:bg-secondary"
+                className="group flex items-center gap-4 rounded-2xl border border-border/70 bg-card p-4 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift"
               >
-                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-secondary font-display text-lg text-secondary-foreground">
-                  {(paciente.nome || "?").charAt(0).toUpperCase()}
-                </span>
+                <Avatar nome={paciente.nome} className="size-12 text-lg" />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-semibold text-foreground">
                     {paciente.nome || "Sem nome"}
@@ -103,7 +111,7 @@ function Pacientes() {
                     {paciente.objetivo || paciente.telefone || "Sem objetivo definido"}
                   </span>
                 </span>
-                <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+                <ChevronRight className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
               </Link>
             </li>
           ))}

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,7 +26,8 @@ export const Route = createFileRoute("/_authenticated/pacientes/novo")({
       { title: "Cadastrar paciente | Amanda Nutri" },
       {
         name: "description",
-        content: "Cadastre um novo paciente e envie automaticamente o convite de acesso por e-mail.",
+        content:
+          "Cadastre um novo paciente e envie automaticamente o convite de acesso por e-mail.",
       },
       { property: "og:title", content: "Cadastrar paciente | Amanda Nutri" },
       { property: "og:description", content: "Cadastro de paciente com convite por e-mail." },
@@ -73,25 +74,40 @@ function NovoPaciente() {
   return (
     <>
       <TituloPagina
+        sobretitulo="Cadastro"
         titulo="Novo paciente"
         descricao="O paciente recebe um convite por e-mail para criar a própria senha."
       />
 
-      <Card>
-        <CardContent className="pt-6">
-          <form onSubmit={submeter} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={submeter} className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Dados pessoais</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="nome">Nome completo</Label>
                 <Input id="nome" name="nome" required placeholder="Maria Souza" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">E-mail</Label>
-                <Input id="email" name="email" type="email" required placeholder="maria@email.com" />
+                <Label htmlFor="email">E-mail (recebe o convite)</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="maria@email.com"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="telefone">Telefone</Label>
-                <Input id="telefone" name="telefone" placeholder="(11) 90000-0000" />
+                <Input
+                  id="telefone"
+                  name="telefone"
+                  inputMode="tel"
+                  placeholder="(11) 90000-0000"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="data_nascimento">Data de nascimento</Label>
@@ -110,12 +126,23 @@ function NovoPaciente() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="objetivo">Objetivo</Label>
-                <Input id="objetivo" name="objetivo" placeholder="Emagrecimento, saúde, performance..." />
-              </div>
             </div>
+          </CardContent>
+        </Card>
 
+        <Card>
+          <CardHeader>
+            <CardTitle>Acompanhamento</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="objetivo">Objetivo</Label>
+              <Input
+                id="objetivo"
+                name="objetivo"
+                placeholder="Emagrecimento, saúde, performance..."
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="observacoes">Observações</Label>
               <Textarea
@@ -125,19 +152,24 @@ function NovoPaciente() {
                 placeholder="Histórico, restrições alimentares, preferências..."
               />
             </div>
+          </CardContent>
+        </Card>
 
-            <div className="flex flex-wrap gap-2">
-              <Button type="submit" disabled={salvando}>
-                {salvando ? <Loader2 className="size-4 animate-spin" /> : null}
-                Cadastrar e convidar
-              </Button>
-              <Button type="button" variant="ghost" onClick={() => navigate({ to: "/pacientes" })}>
-                Cancelar
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+        <div className="flex flex-wrap gap-2">
+          <Button type="submit" size="lg" disabled={salvando}>
+            {salvando ? <Loader2 className="size-4 animate-spin" /> : null}
+            Cadastrar e convidar
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate({ to: "/pacientes" })}
+          >
+            Cancelar
+          </Button>
+        </div>
+      </form>
     </>
   );
 }
